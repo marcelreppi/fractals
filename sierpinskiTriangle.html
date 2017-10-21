@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Sierpinski triangle</title>
+	</head>
+	<body>
+		<canvas id=canvas></canvas>
+		<script type="text/javascript">
+			let canvas = document.getElementById('canvas');
+			let context = canvas.getContext('2d');
+
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight;
+
+			function drawTriangle(x, y, width, iteration){
+				let halfW = width/2;
+				let currentHeight = (Math.sqrt(3)/2)*width;
+				let nextHeight = (Math.sqrt(3)/2)*halfW;
+
+				//draw starting triangle
+				context.beginPath();
+				context.moveTo(x,y);
+				context.lineTo(x+halfW,y-currentHeight);
+				context.lineTo(x+width,y);
+				context.closePath();
+				context.fill();
+				context.fillStyle = 'white';
+				drawSierpinskiTriangle(x, y, width, iteration - 1);
+			}
+
+			let drawSierpinskiTriangle = function(x, y, width, iteration){
+				let halfW = width/2;
+				let currentHeight = (Math.sqrt(3)/2)*width;
+				let nextHeight = (Math.sqrt(3)/2)*halfW;
+
+				if(iteration <= 0){
+					return;
+				}
+
+				//fill middle
+				context.beginPath();
+				context.moveTo(x+halfW,y);
+				context.lineTo(x+(halfW/2),y-nextHeight);
+				context.lineTo(x+(3*halfW/2),y-nextHeight);
+				context.closePath();
+				context.fill();
+
+				drawSierpinskiTriangle(x,y,halfW, iteration - 1);
+				drawSierpinskiTriangle(x+halfW,y,halfW, iteration - 1);
+				drawSierpinskiTriangle(x+(halfW/2),y-nextHeight,halfW, iteration - 1);
+
+			}
+
+			let width = 700;
+			let iteration = 9;
+
+			context.fillStyle = 'black';
+			context.strokeStyle = 'black';
+
+			drawTriangle(canvas.width/2 - width/2, canvas.height - 100 , width, iteration);
+
+			let i = 1;
+			function animateTriangle(){
+				context.clearRect(0, 0, canvas.width, canvas.height);
+				context.fillStyle = 'black';
+				drawTriangle(canvas.width/2 - width/2, canvas.height - 100 , width, i);
+				i++
+				if(i == iteration){
+					i = 1;
+				}
+			}
+			// setInterval(animateTriangle, 500);
+		</script>
+		<style>
+			html, body {
+				margin: 0px
+			}
+			canvas {
+				display: inline
+			}
+		</style>
+	</body>
+</html>

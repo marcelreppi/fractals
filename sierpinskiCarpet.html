@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sierpinski carpet</title>
+</head>
+<body>
+	<canvas id=canvas></canvas>
+	<script type="text/javascript">
+		let canvas = document.getElementById('canvas');
+		let context = canvas.getContext('2d');
+
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+
+		let drawCarpet = function(x, y, size, iteration){
+			firstIteration = false;
+			context.fillRect(x, y, size, size);
+			context.fillStyle = 'black';
+			drawSierpinskiCarpet(x, y, size, iteration - 1);
+		}
+
+		let drawSierpinskiCarpet = function(x, y, size, iteration){
+			
+			if(iteration <= 0){
+				return;
+			}
+
+			let thirdSize = size/3
+			for(let i = 0; i < 3; i++){
+				for(let j = 0; j < 3; j++){
+					let currentX = x+i*thirdSize;
+					let currentY = y+j*thirdSize;
+					if(i == 1 && j == 1){
+						context.fillRect(currentX, currentY, thirdSize, thirdSize);
+						continue;
+					}
+					drawSierpinskiCarpet(currentX, currentY, thirdSize, iteration - 1);
+				}
+			}
+		}
+
+		let size = 700
+		let iterations = 7;
+
+		context.fillStyle = 'white';
+		context.strokeStyle = 'black';
+
+		drawCarpet(canvas.width/2 - size/2, canvas.height/2 - size/2, size, iterations);
+
+		let i = 1;
+		function animateCarpet(){
+			context.clearRect(0, 0, canvas.width, canvas.height);
+			context.fillStyle = 'white';
+			drawCarpet(canvas.width/2 - size/2, canvas.height/2 - size/2, size, i);
+			i++
+			if(i == iterations){
+				i = 1;
+			}
+		}
+		// setInterval(animateCarpet, 500);
+	</script>
+
+	<style>
+			html, body {
+				margin: 0px
+			}
+			canvas {
+				display: block
+			}
+		</style>
+</body>
+</html>
